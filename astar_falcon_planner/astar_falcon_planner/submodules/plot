@@ -1,0 +1,61 @@
+import matplotlib.pyplot as plt
+
+# Given canvas height (as defined in your code)
+canvas_height = 300.0
+
+# Initial starting position (as defined in your code)
+start_x, start_y, start_theta = 30, 30, 0.0
+
+# Raw data: each entry is [x_cm, y_cm, theta (in degrees)]
+raw_data = [
+    [30, 269, 0], [33, 268, 340], [38, 265, 310], [40, 262, 290], [43, 254, 300],
+    [49, 245, 300], [50, 240, 270], [52, 235, 300], [56, 227, 290], [59, 218, 290],
+    [62, 209, 280], [64, 201, 290], [67, 192, 280], [68, 185, 280], [71, 177, 290],
+    [73, 168, 280], [75, 158, 280], [76, 150, 270], [76, 139, 270], [76, 129, 270],
+    [76, 118, 270], [76, 108, 270], [76, 97, 270], [76, 87, 270], [78, 82, 300],
+    [81, 78, 330], [86, 77, 359], [97, 77, 359], [100, 77, 19], [105, 78, 350],
+    [109, 78, 9], [112, 78, 350], [117, 78, 19], [125, 82, 29], [129, 85, 59],
+    [134, 94, 59], [138, 102, 69], [142, 110, 59], [146, 118, 69], [149, 126, 59],
+    [153, 134, 69], [157, 142, 59], [161, 150, 69], [164, 158, 59], [168, 166, 69],
+    [171, 173, 69], [174, 182, 69], [178, 192, 69], [181, 201, 69], [185, 211, 69],
+    [188, 215, 39], [196, 221, 39], [199, 223, 19], [202, 223, 359], [206, 223, 340],
+    [209, 222, 359], [218, 222, 350], [221, 222, 9], [226, 221, 340], [236, 218, 340],
+    [241, 215, 310], [245, 212, 340], [253, 208, 330], [260, 203, 320], [262, 201, 320],
+    [268, 196, 320], [273, 192, 320], [279, 187, 320], [287, 181, 320], [292, 176, 320],
+    [298, 172, 320], [303, 167, 320], [309, 163, 320], [314, 158, 320], [321, 153, 330],
+    [328, 148, 320], [334, 144, 320], [339, 139, 320], [345, 135, 320], [350, 130, 320],
+    [356, 126, 320], [363, 121, 330], [370, 116, 320], [375, 111, 320], [381, 107, 320],
+    [386, 102, 320], [394, 96, 320], [400, 91, 320], [408, 85, 320], [416, 78, 320],
+    [419, 77, 340], [427, 75, 350], [431, 75, 9], [438, 76, 9], [446, 78, 19],
+    [456, 81, 19], [461, 84, 49], [463, 87, 69], [466, 95, 59], [470, 103, 69],
+    [474, 111, 59], [479, 120, 59], [485, 129, 59], [490, 136, 49], [494, 142, 49],
+    [496, 145, 69], [500, 149, 0]
+]
+
+# Function to transform a point using the given transformation:
+# x remains the same, y is computed as (canvas_height - y_cm) minus half the canvas height.
+def transform_point(x_cm, y_cm, canvas_height):
+    x = x_cm
+    y = (canvas_height - y_cm) - (canvas_height / 2.0)
+    return (x, y)
+
+# Reconstruct the path: start from (30, 30) and then append each transformed point.
+path_positions = [(start_x, start_y)]
+for data in raw_data:
+    x_cm, y_cm, theta = data
+    point = transform_point(x_cm, y_cm, canvas_height)
+    path_positions.append(point)
+
+# Separate the positions into x and y coordinates for plotting.
+x_coords = [pt[0] for pt in path_positions]
+y_coords = [pt[1] for pt in path_positions]
+
+# Create the plot.
+plt.figure(figsize=(10, 6))
+plt.plot(x_coords, y_coords, marker='o', linestyle='-')
+plt.xlabel('X Coordinate')
+plt.ylabel('Y Coordinate')
+plt.title('Traced Path from Raw Data')
+plt.grid(True)
+plt.axis('equal')  # Maintain equal aspect ratio.
+plt.show()
